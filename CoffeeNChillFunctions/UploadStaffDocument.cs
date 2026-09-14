@@ -11,7 +11,7 @@ namespace CoffeeNChillFunctions
     public class UploadStaffDocument
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=coffeenchillstorage6;AccountKey=D7q752XFlgKjtr7+XuOA8fkxN8CMNduwvl84ew50Wv75phmtvbAd3m1v/qmXR2v5fwCN1Qsz2JnM+ASt9koapw==;EndpointSuffix=core.windows.net";
+
         private const string ShareName = "staff-docs";
 
         public UploadStaffDocument(ILoggerFactory loggerFactory)
@@ -45,7 +45,8 @@ var boundary = GetBoundary(contentTypeValues.First());
 
             var fileName = section.ContentDisposition?.Split("filename=")[1].Trim('"') ?? "unnamed-file";
 
-            var shareClient = new ShareClient(ConnectionString, ShareName);
+            var connectionString = Environment.GetEnvironmentVariable("FileShareConnectionString");
+var shareClient = new ShareClient(connectionString, ShareName);
             await shareClient.CreateIfNotExistsAsync();
             var directory = shareClient.GetRootDirectoryClient();
             var fileClient = directory.GetFileClient(fileName);

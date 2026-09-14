@@ -10,7 +10,7 @@ namespace CoffeeNChillFunctions
     public class ListStaffDocuments
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=coffeenchillstorage6;AccountKey=D7q752XFlgKjtr7+XuOA8fkxN8CMNduwvl84ew50Wv75phmtvbAd3m1v/qmXR2v5fwCN1Qsz2JnM+ASt9koapw==;EndpointSuffix=core.windows.net";
+        
         private const string ShareName = "staff-docs";
 
         public ListStaffDocuments(ILoggerFactory loggerFactory)
@@ -24,7 +24,8 @@ namespace CoffeeNChillFunctions
         {
             _logger.LogInformation("Listing staff documents.");
 
-            var shareClient = new ShareClient(ConnectionString, ShareName);
+            var connectionString = Environment.GetEnvironmentVariable("FileShareConnectionString");
+var shareClient = new ShareClient(connectionString, ShareName);
             await shareClient.CreateIfNotExistsAsync();
             var directory = shareClient.GetRootDirectoryClient();
 
