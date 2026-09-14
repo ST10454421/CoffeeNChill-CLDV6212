@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "CoffeeNChill Part 1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "CreateMenuItem",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"partitionKey\": \"Hot Drinks\",\n  \"rowKey\": \"COF-001\",\n  \"name\": \"Espresso\",\n  \"description\": \"Strong and bold single shot\",\n  \"price\": 25.00,\n  \"isAvailable\": true\n}"
+        },
+        "url": { "raw": "http://localhost:7071/api/menu", "host": ["localhost"], "port": "7071", "path": ["api", "menu"] }
+      }
+    },
+    {
+      "name": "GetAllMenuItems",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:7071/api/menu", "host": ["localhost"], "port": "7071", "path": ["api", "menu"] }
+      }
+    },
+    {
+      "name": "GetMenuItemsByCategory",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:7071/api/menu/category/Hot Drinks", "host": ["localhost"], "port": "7071", "path": ["api", "menu", "category", "Hot Drinks"] }
+      }
+    },
+    {
+      "name": "UpdateMenuItem",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": 28.00,\n  \"isAvailable\": false\n}"
+        },
+        "url": { "raw": "http://localhost:7071/api/menu/Hot Drinks/COF-001", "host": ["localhost"], "port": "7071", "path": ["api", "menu", "Hot Drinks", "COF-001"] }
+      }
+    },
+    {
+      "name": "DeleteMenuItem",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "http://localhost:7071/api/menu/Hot Drinks/COF-001", "host": ["localhost"], "port": "7071", "path": ["api", "menu", "Hot Drinks", "COF-001"] }
+      }
+    },
+    {
+      "name": "UploadStaffDocument",
+      "request": {
+        "method": "POST",
+        "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "" }] },
+        "url": { "raw": "http://localhost:7071/api/documents/upload", "host": ["localhost"], "port": "7071", "path": ["api", "documents", "upload"] }
+      }
+    },
+    {
+      "name": "ListStaffDocuments",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:7071/api/documents", "host": ["localhost"], "port": "7071", "path": ["api", "documents"] }
+      }
+    },
+    {
+      "name": "DownloadStaffDocument",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:7071/api/documents/download/example.png", "host": ["localhost"], "port": "7071", "path": ["api", "documents", "download", "example.png"] }
+      }
+    }
+  ]
+}
