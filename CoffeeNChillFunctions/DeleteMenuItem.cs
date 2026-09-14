@@ -9,7 +9,7 @@ namespace CoffeeNChillFunctions
     public class DeleteMenuItem
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "UseDevelopmentStorage=true";
+        
         private const string TableName = "MenuItems";
 
         public DeleteMenuItem(ILoggerFactory loggerFactory)
@@ -24,7 +24,8 @@ namespace CoffeeNChillFunctions
         {
             _logger.LogInformation($"Deleting menu item {id} in category {category}");
 
-            var tableClient = new TableClient(ConnectionString, TableName);
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+var tableClient = new TableClient(connectionString, TableName);
             await tableClient.DeleteEntityAsync(category, id);
 
             var response = req.CreateResponse(HttpStatusCode.NoContent);

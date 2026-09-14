@@ -11,7 +11,7 @@ namespace CoffeeNChillFunctions
     public class CreateMenuItem
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "UseDevelopmentStorage=true";
+        
         private const string TableName = "MenuItems";
 
         public CreateMenuItem(ILoggerFactory loggerFactory)
@@ -40,7 +40,8 @@ namespace CoffeeNChillFunctions
             }
 
             // Connect to Azure Table Storage (Azurite locally) and create the table if it doesn't exist yet
-            var tableClient = new TableClient(ConnectionString, TableName);
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+var tableClient = new TableClient(connectionString, TableName);
             await tableClient.CreateIfNotExistsAsync();
 
             // Insert the new menu item as a row in the table

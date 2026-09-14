@@ -10,7 +10,7 @@ namespace CoffeeNChillFunctions
     public class GetMenuItemsByCategory
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "UseDevelopmentStorage=true";
+        
         private const string TableName = "MenuItems";
 
         public GetMenuItemsByCategory(ILoggerFactory loggerFactory)
@@ -25,7 +25,8 @@ namespace CoffeeNChillFunctions
         {
             _logger.LogInformation($"Getting menu items for category: {category}");
 
-            var tableClient = new TableClient(ConnectionString, TableName);
+            var connectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+var tableClient = new TableClient(connectionString, TableName);
             await tableClient.CreateIfNotExistsAsync();
 
             var items = new List<MenuItem>();
