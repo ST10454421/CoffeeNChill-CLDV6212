@@ -1,3 +1,4 @@
+using Azure.Storage;
 using System.Net;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Azure.Functions.Worker;
@@ -10,7 +11,7 @@ namespace CoffeeNChillFunctions
     public class UploadStaffDocument
     {
         private readonly ILogger _logger;
-        private const string ConnectionString = "UseDevelopmentStorage=true";
+        private const string ConnectionString = "DefaultEndpointsProtocol=https;AccountName=coffeenchillstorage6;AccountKey=D7q752XFlgKjtr7+XuOA8fkxN8CMNduwvl84ew50Wv75phmtvbAd3m1v/qmXR2v5fwCN1Qsz2JnM+ASt9koapw==;EndpointSuffix=core.windows.net";
         private const string ShareName = "staff-docs";
 
         public UploadStaffDocument(ILoggerFactory loggerFactory)
@@ -25,7 +26,13 @@ namespace CoffeeNChillFunctions
             _logger.LogInformation("Uploading a staff document.");
 
             // Parse the multipart/form-data body to get the uploaded file
-            var boundary = GetBoundary(req.Headers.GetValues("Content-Type").First());
+            if (!req.Headers.TryGetValues("Content-Type", out var contentTypeValues))
+{
+    var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+    await badResponse.WriteStringAsync("Missing Content-Type header.");
+    return badResponse;
+}
+var boundary = GetBoundary(contentTypeValues.First());
             var reader = new MultipartReader(boundary, req.Body);
             var section = await reader.ReadNextSectionAsync();
 
