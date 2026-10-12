@@ -1,0 +1,83 @@
+{
+  "info": {
+    "_postman_id": "2943ee2e-abd1-470a-9a6e-07296d2390a1",
+    "name": "coffeeNChill part 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58211254",
+    "_collection_link": "https://go.postman.co/collection/58211254-2943ee2e-abd1-470a-9a6e-07296d2390a1?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get Orders",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\npm.test(\"Has order status\", () => pm.expect(pm.response.text()).to.include(\"Status\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:7071/api/orders",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7071",
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Queue Order Invalid",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Bad request rejected\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:7071/api/orders/queue",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7071",
+          "path": [
+            "api",
+            "orders",
+            "queue"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
