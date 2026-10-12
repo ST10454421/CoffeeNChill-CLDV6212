@@ -2,38 +2,40 @@
   "info": {
     "_postman_id": "2943ee2e-abd1-470a-9a6e-07296d2390a1",
     "name": "coffeeNChill part 2",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "58211254",
-    "_collection_link": "https://go.postman.co/collection/58211254-2943ee2e-abd1-470a-9a6e-07296d2390a1?source=collection_link"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Get Orders",
+      "name": "Queue Order",
       "event": [
         {
           "listen": "test",
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\npm.test(\"Has order status\", () => pm.expect(pm.response.text()).to.include(\"Status\"));"
+              "pm.test(\"Order accepted\", () => pm.expect(pm.response.code).to.be.oneOf([200, 202]));"
             ]
           }
         }
       ],
       "request": {
-        "method": "GET",
+        "method": "POST",
         "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"OrderId\": \"ORD-2026-8801\",\n  \"CustomerName\": \"Jane Smith\",\n  \"SelectedItemSKUs\": [\"COF-001\", \"PAS-104\"],\n  \"TotalPrice\": 65.00,\n  \"OrderTimestamp\": \"2026-10-12T10:15:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
-          "raw": "http://localhost:7071/api/orders",
+          "raw": "http://localhost:7071/api/orders/queue",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "7071",
-          "path": [
-            "api",
-            "orders"
-          ]
+          "path": ["api", "orders", "queue"]
         }
       },
       "response": []
@@ -66,15 +68,36 @@
         "url": {
           "raw": "http://localhost:7071/api/orders/queue",
           "protocol": "http",
-          "host": [
-            "localhost"
-          ],
+          "host": ["localhost"],
           "port": "7071",
-          "path": [
-            "api",
-            "orders",
-            "queue"
-          ]
+          "path": ["api", "orders", "queue"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Orders",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Has order status\", () => pm.expect(pm.response.text()).to.include(\"Status\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:7071/api/orders",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "7071",
+          "path": ["api", "orders"]
         }
       },
       "response": []
