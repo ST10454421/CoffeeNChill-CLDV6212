@@ -1,5 +1,6 @@
 using CoffeeNChill.Api.Middleware;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<CoffeeNChill.Api.Services.UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
