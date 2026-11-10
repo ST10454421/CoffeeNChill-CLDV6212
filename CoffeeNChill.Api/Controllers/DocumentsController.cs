@@ -1,4 +1,5 @@
 using Azure.Storage.Files.Shares;
+using CoffeeNChill.Api.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,8 +30,9 @@ public class DocumentsController : ControllerBase
     [Consumes("multipart/form-data")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Upload([FromForm] IFormFile file)
+    public async Task<IActionResult> Upload([FromForm] UploadDocumentDto dto)
     {
+        var file = dto.File;
         if (file is null || file.Length == 0) return BadRequest("A file is required.");
 
         var name = Path.GetFileName(file.FileName);

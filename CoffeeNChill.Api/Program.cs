@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     var xml = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
-    c.IncludeXmlComments(xml);
+    if (File.Exists(xml)) c.IncludeXmlComments(xml);
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
