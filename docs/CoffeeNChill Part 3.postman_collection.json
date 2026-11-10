@@ -1,0 +1,70 @@
+{
+  "info": {
+    "name": "CoffeeNChill Part 3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:5000" }],
+  "item": [
+    {
+      "name": "Register Admin",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Registered or exists', () => pm.expect(pm.response.code).to.be.oneOf([201, 409]));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/auth/register",
+        "body": { "mode": "raw", "raw": "{\"email\":\"admin@coffeenchill.ac.za\",\"password\":\"Password123!\",\"fullName\":\"Test Admin\",\"role\":\"Admin\"}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Login Admin",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Login 200', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('token', pm.response.json().token);"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/auth/login",
+        "body": { "mode": "raw", "raw": "{\"email\":\"admin@coffeenchill.ac.za\",\"password\":\"Password123!\"}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Register Customer",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Registered or exists', () => pm.expect(pm.response.code).to.be.oneOf([201, 409]));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/auth/register",
+        "body": { "mode": "raw", "raw": "{\"email\":\"customer@coffeenchill.ac.za\",\"password\":\"Password123!\",\"fullName\":\"Test Customer\",\"role\":\"Customer\"}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Login Customer",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Login 200', () => pm.response.to.have.status(200));", "pm.collectionVariables.set('customerToken', pm.response.json().token);"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/auth/login",
+        "body": { "mode": "raw", "raw": "{\"email\":\"customer@coffeenchill.ac.za\",\"password\":\"Password123!\"}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Get Menu (public)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Public 200', () => pm.response.to.have.status(200));"] } }],
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/menu" }
+    },
+    {
+      "name": "Create Menu - No Token (401)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Unauthorized 401', () => pm.response.to.have.status(401));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/menu",
+        "body": { "mode": "raw", "raw": "{\"category\":\"Hot Drinks\",\"id\":\"COF-001\",\"name\":\"Espresso\",\"description\":\"Single shot\",\"price\":28.5,\"isAvailable\":true}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Create Menu - Customer (403)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Forbidden 403', () => pm.response.to.have.status(403));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/menu",
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{customerToken}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\"category\":\"Hot Drinks\",\"id\":\"COF-001\",\"name\":\"Espresso\",\"description\":\"Single shot\",\"price\":28.5,\"isAvailable\":true}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Create Menu - Admin (201)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Created 201', () => pm.response.to.have.status(201));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/menu",
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+        "body": { "mode": "raw", "raw": "{\"category\":\"Hot Drinks\",\"id\":\"COF-001\",\"name\":\"Espresso\",\"description\":\"Single shot\",\"price\":28.5,\"isAvailable\":true}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Queue Order (public)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Accepted 202', () => pm.response.to.have.status(202));"] } }],
+      "request": { "method": "POST", "header": [], "url": "{{baseUrl}}/api/orders/queue",
+        "body": { "mode": "raw", "raw": "{\"orderId\":\"ORD-2026-9001\",\"customerName\":\"Jane Smith\",\"selectedItemSKUs\":[\"COF-001\"],\"totalPrice\":28.5}", "options": { "raw": { "language": "json" } } } }
+    },
+    {
+      "name": "Get Orders - Admin",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('Orders 200', () => pm.response.to.have.status(200));"] } }],
+      "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/orders",
+        "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] } }
+    }
+  ]
+}
